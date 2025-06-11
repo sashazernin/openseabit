@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/openseabit/static/css/main.4c04b5b0.css",
-    "main.js": "/openseabit/static/js/main.b166a4ea.js",
+    "main.js": "/openseabit/static/js/main.b7d32020.js",
     "static/js/453.0d2d2fd8.chunk.js": "/openseabit/static/js/453.0d2d2fd8.chunk.js",
     "static/media/index.cjs": "/openseabit/static/media/index.720d13936a625d158fd6.cjs",
     "index.html": "/openseabit/index.html",
     "main.4c04b5b0.css.map": "/openseabit/static/css/main.4c04b5b0.css.map",
-    "main.b166a4ea.js.map": "/openseabit/static/js/main.b166a4ea.js.map",
+    "main.b7d32020.js.map": "/openseabit/static/js/main.b7d32020.js.map",
     "453.0d2d2fd8.chunk.js.map": "/openseabit/static/js/453.0d2d2fd8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4c04b5b0.css",
-    "static/js/main.b166a4ea.js"
+    "static/js/main.b7d32020.js"
   ]
 }
