@@ -1,0 +1,16 @@
+.iconButton {
+  transition: 0.15s;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.iconButton:hover {
+  background: rgb(0 0 0 / 10%);
+}
+
+.iconButton:active {
+  background: rgb(0 0 0 / 20%);
+}

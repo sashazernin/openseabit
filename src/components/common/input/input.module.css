@@ -1,0 +1,36 @@
+.inpotContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+}
+
+.inpotContainer:hover {
+  border: 1px solid black;
+}
+
+.inpotContainer input:focus {
+  outline: none;
+}
+
+.inpotContainer input {
+  letter-spacing: 0.5px;
+  padding: 7px 6px;
+  border: none;
+  flex: 1;
+  border-radius: 6px;
+}
+
+.label {
+  pointer-events: none;
+  padding: 0px 5px;
+  transition: 0.15s;
+  position: absolute;
+  background: white;
+  left: 1px;
+  top: 7px;
+  color: gray;
+}
