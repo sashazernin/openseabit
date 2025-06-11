@@ -2,25 +2,13 @@ import './App.css';
 import { useBuyNFTMutation, useGetListingsQuery } from './store/slices/listings';
 import styles from './App.module.css'
 import Input from './components/common/input/input';
-import { ChangeEvent, ClipboardEvent, useEffect, useState } from 'react';
-import { Chain, Listing, OpenSeaSDK, Order, OrderSide } from 'opensea-js';
-import { JsonRpcProvider } from 'ethers';
-import { infuraKey, openSeaKey, openseaSDK, provider, walletWithProvider } from './helpers';
+import { ChangeEvent, ClipboardEvent } from 'react';
+import { openseaSDK, walletWithProvider } from './helpers';
+import { useUrlState } from './hooks/useUrlState';
 
 function App() {
-  const [slug, setSlug] = useState('')
-
-  const changeSlug = (value: string) => {
-    setSlug(value)
-    const params = new URLSearchParams(window.location.search);
-    params.set("slug", value);
-    window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
-  }
-
-  const handleChangeSlug = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    changeSlug(value)
-  }
+  const { value: slug, onChange: changeSlug } = useUrlState('slug')
+  const { value: openSeaKey, onChange: changeOpenSeaKey } = useUrlState('openSeaKey')
 
   const handlePasteSlug = (e: ClipboardEvent<HTMLInputElement>) => {
     const value = e.clipboardData.getData('text')
@@ -31,13 +19,7 @@ function App() {
     changeSlug(parsedValue)
   }
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get("slug");
-    if (value) setSlug(value)
-  }, [])
-
-  const { data = [], refetch } = useGetListingsQuery({ collection_slug: slug, options: { limit: '10' } });
+  const { data = [], refetch } = useGetListingsQuery({ collection_slug: slug ?? '', options: { limit: '10' } });
   const [buyNFT] = useBuyNFTMutation()
 
   const handleBuy = (item: any) => async () => {
@@ -49,9 +31,9 @@ function App() {
 
   return (
     <div className="App" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-      <div style={{ width: 'min-content', paddingTop: '40px' }}>
+      <div style={{ width: 'min-content', paddingTop: '20px' }}>
         <div>
-          <table style={{ minHeight: '528px', minWidth: '442px' }}>
+          <table style={{ minHeight: '528px' }}>
             <thead>
               <tr>
                 <td>
@@ -101,8 +83,11 @@ function App() {
         <div style={{ padding: '16px', display: 'flex', justifyContent: 'start' }}>
           <button style={{ padding: '10px 20px', cursor: 'pointer', fontSize: '16px' }} onClick={refetch}>refetch</button>
           <div style={{ flex: 1 }}></div>
-          <Input label='collection_slug' value={slug} onChange={handleChangeSlug} onPaste={handlePasteSlug}></Input>
+          <Input label='collection_slug' value={slug} onChange={(e) => changeSlug(e.target.value)} onPaste={handlePasteSlug}></Input>
         </div>
+        {/* <div style={{ padding: '16px', display: 'flex', height: '40px' }}>
+          <Input label='open sea key' value={openSeaKey} onChange={(e) => changeOpenSeaKey(e.target.value)}></Input>
+        </div> */}
       </div>
     </div>
   );
