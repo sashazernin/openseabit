@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { baseUrl, openSeaKey } from '../../helpers';
+import { baseUrl } from '../../helpers';
 
 interface Price {
   current: {
@@ -64,6 +64,8 @@ export const listingsApi = createApi({
     baseUrl: `${baseUrl}`,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
+      const params = new URLSearchParams(window.location.search);
+      const openSeaKey = params.get('openSeaKey');
       if (openSeaKey) headers.set('x-api-key', openSeaKey);
       headers.set('Content-Type', 'application/json');
       return headers;

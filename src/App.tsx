@@ -85,9 +85,9 @@ function App() {
           <div style={{ flex: 1 }}></div>
           <Input label='collection_slug' value={slug} onChange={(e) => changeSlug(e.target.value)} onPaste={handlePasteSlug}></Input>
         </div>
-        {/* <div style={{ padding: '16px', display: 'flex', height: '40px' }}>
+        <div style={{ padding: '16px', display: 'flex', height: '40px' }}>
           <Input label='open sea key' value={openSeaKey} onChange={(e) => changeOpenSeaKey(e.target.value)}></Input>
-        </div> */}
+        </div>
       </div>
     </div>
   );
