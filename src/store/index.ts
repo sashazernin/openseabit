@@ -1,9 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { listingsApi } from './slices/listings';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { graphQlApi } from './slices/grapthQl';
 
 const reducers = combineReducers({
   [listingsApi.reducerPath]: listingsApi.reducer,
+  [graphQlApi.reducerPath]: graphQlApi.reducer
 });
 
 export const store = configureStore({
@@ -11,6 +13,7 @@ export const store = configureStore({
   reducer: (state, action) => reducers(state, action),
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
     .concat(listingsApi.middleware)
+    .concat(graphQlApi.middleware)
 });
 
 setupListeners(store.dispatch);
