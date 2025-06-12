@@ -1,5 +1,5 @@
 import './App.css';
-import { useBuyNFTMutation, useGetListingsQuery } from './store/slices/listings';
+import { Listing, useBuyNFTMutation, useGetListingsQuery } from './store/slices/listings';
 import styles from './App.module.css'
 import Input from './components/common/input/input';
 import { ClipboardEvent } from 'react';
@@ -28,11 +28,31 @@ function App() {
   const [check1] = useCheck1Mutation()
   const [check2] = useCheck2Mutation()
 
-  const handleBuy = (item: any) => async () => {
-    if (!openseaSDK || !signer) return
-    const order = await openseaSDK.api.getOrder({ side: OrderSide.LISTING })
+  const handleBuy = (item: Listing) => async () => {
+    if (!openseaSDK || !signer || !slug) return
     const accountAddress = await signer.getAddress()
-    const transactionHash = await openseaSDK.fulfillOrder({ order, accountAddress })
+    check1({
+      operationName: 'CollectionSweepQuoteFlowQuery',
+      variables: {
+        buyer: accountAddress,
+        collectionSlug: slug,
+        maxAmountOfItems: 1,
+        maxPricePerItem: '0.0000528'
+      }
+    })
+    check2({
+      operationName: 'CollectionSweepQuery',
+      variables: {
+        buyer: accountAddress,
+        collectionSlug: slug,
+        maxAmountOfItems: 1,
+        maxPricePerItem: '0.0000528',
+        paymentAsset: {
+          address: '0x0000000000000000000000000000000000000000',
+          chain: item.chain
+        }
+      }
+    })
   }
 
   return (
