@@ -14,7 +14,7 @@ function useOpenSeaSDK() {
     const openSeaKey = params.get('openSeaKey') ?? '';
 
     const sdk = new OpenSeaSDK(signer, {
-      chain: Chain.Mainnet,
+      chain: Chain.Base,
       apiKey: openSeaKey,
     })
 

@@ -30,7 +30,11 @@ function App() {
 
   const handleBuy = (item: any) => async () => {
     if (!openseaSDK || !signer) return
-    const order = await openseaSDK.api.getOrder({ side: OrderSide.LISTING })
+    const order = await openseaSDK.api.getOrder({
+      assetContractAddress: item.protocol_data.parameters.offer[0].token,
+      tokenId: item.protocol_data.parameters.offer[0].identifierOrCriteria,
+      side: OrderSide.LISTING
+    })
     const accountAddress = await signer.getAddress()
     const transactionHash = await openseaSDK.fulfillOrder({ order, accountAddress })
   }
