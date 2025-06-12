@@ -3,13 +3,16 @@ import { useBuyNFTMutation, useGetListingsQuery } from './store/slices/listings'
 import styles from './App.module.css'
 import Input from './components/common/input/input';
 import { ClipboardEvent } from 'react';
-import { openseaSDK, walletWithProvider } from './helpers';
 import { useUrlState } from './hooks/useUrlState';
 import { useCheck1Mutation, useCheck2Mutation } from './store/slices/grapthQl';
+import { useOpenSeaSDK } from './hooks/useOpenSeaSDK';
+import { OrderSide } from 'opensea-js';
 
 function App() {
   const { value: slug, onChange: changeSlug } = useUrlState('slug')
   const { value: openSeaKey, onChange: changeOpenSeaKey } = useUrlState('openSeaKey')
+
+  const { openseaSDK, signer } = useOpenSeaSDK()
 
   const handlePasteSlug = (e: ClipboardEvent<HTMLInputElement>) => {
     const value = e.clipboardData.getData('text')
@@ -21,34 +24,15 @@ function App() {
   }
 
   const { data = [], refetch } = useGetListingsQuery({ collection_slug: slug ?? '', options: { limit: '10' } });
-  const [buyNFT] = useBuyNFTMutation()
 
   const [check1] = useCheck1Mutation()
   const [check2] = useCheck2Mutation()
 
   const handleBuy = (item: any) => async () => {
-    check1({
-      operationName: 'CollectionSweepQuoteFlowQuery',
-      variables: {
-        buyer: '0xEf6Dcb188e91E196F891d56102bECC179624E65D',
-        collectionSlug: 'maxy-base-main',
-        maxAmountOfItems: 5,
-        maxPricePerItem: '0.0000528'
-      }
-    })
-    check2({
-      operationName: 'CollectionSweepQuery',
-      variables: {
-        buyer: '0xEf6Dcb188e91E196F891d56102bECC179624E65D',
-        collectionSlug: 'maxy-base-main',
-        maxAmountOfItems: 5,
-        maxPricePerItem: '0.0000528',
-        paymentAsset: {
-          address: '0x0000000000000000000000000000000000000000',
-          chain: 'base'
-        }
-      }
-    })
+    if (!openseaSDK || !signer) return
+    const order = await openseaSDK.api.getOrder({ side: OrderSide.LISTING })
+    const accountAddress = await signer.getAddress()
+    const transactionHash = await openseaSDK.fulfillOrder({ order, accountAddress })
   }
 
   return (
